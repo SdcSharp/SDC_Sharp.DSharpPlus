@@ -2,44 +2,48 @@
 using System.Linq;
 using System.Threading.Tasks;
 using SDC_Sharp.DSharpPlus.Types;
-using static SDC_Sharp.SdcSharpExtensions;
+using SDC_Sharp.SDC_Sharp;
 
 namespace SDC_Sharp.DSharpPlus.Services
 {
     public class Monitoring
     {
-        internal Monitoring()
-        {
-        }
+        private SdcSharpClient _sdcClient;
+        internal Monitoring(ref SdcSharpClient client) => _sdcClient = client;
 
         public async Task<GuildInfo> GetGuild(ulong guildId)
         {
-            var res = await SdcClient.GetRequest<GuildInfo>($"guild/{guildId}");
-            res.id = guildId;
+            var res = await _sdcClient.GetRequest<GuildInfo>($"guild/{guildId}");
+            res.Id = guildId;
 
             return res;
         }
 
         public async Task<GuildPlace> GetGuildPlace(ulong guildId)
         {
-            var res = await SdcClient.GetRequest<GuildPlace>($"guild/{guildId}/place");
-            res.id = guildId;
+            var res = await _sdcClient.GetRequest<GuildPlace>($"guild/{guildId}/place");
+            res.Id = guildId;
 
             return res;
         }
 
         public async Task<UserRatedServers> GetUserRatedServers(ulong userId, bool fetch = false)
         {
-            var raw = await SdcClient.GetRequest<Dictionary<string, byte>>($"user/{userId}/rated");
+            var raw = await _sdcClient.GetRequest<Dictionary<string, byte>>($"user/{userId}/rated");
             var list = new LinkedList<UserRate>();
 
-            foreach (var (id, rate) in raw)
-                list.AddLast(new UserRate
+            await Task.Run(async () =>
+            {
+                foreach (var (id, rate) in raw)
                 {
-                    id = ulong.Parse(id),
-                    rate = rate,
-                    guild = !fetch ? null : await SdcClient.Wrapper.GetGuild(ulong.Parse(id))
-                });
+                    list.AddLast(new UserRate
+                    {
+                        Id = ulong.Parse(id),
+                        Rate = rate,
+                        Guild = !fetch ? null : await _sdcClient.Wrapper.GetGuild(ulong.Parse(id))
+                    });
+                }
+            });
 
             return new UserRatedServers
             {
@@ -49,16 +53,21 @@ namespace SDC_Sharp.DSharpPlus.Services
 
         public async Task<GuildRatedUsers> GetGuildRated(ulong guildId, bool fetch = false)
         {
-            var raw = await SdcClient.GetRequest<Dictionary<string, byte>>($"guild/{guildId}/rated");
+            var raw = await _sdcClient.GetRequest<Dictionary<string, byte>>($"guild/{guildId}/rated");
             var list = new LinkedList<UserRate>();
 
-            foreach (var (id, rate) in raw)
-                list.AddLast(new UserRate
+            await Task.Run(async () =>
+            {
+                foreach (var (id, rate) in raw)
                 {
-                    id = ulong.Parse(id),
-                    rate = rate,
-                    user = !fetch ? null : await SdcClient.Wrapper.GetUser(ulong.Parse(id))
-                });
+                    list.AddLast(new UserRate
+                    {
+                        Id = ulong.Parse(id),
+                        Rate = rate,
+                        User = !fetch ? null : await _sdcClient.Wrapper.GetUser(ulong.Parse(id))
+                    });
+                }
+            });
 
             return new GuildRatedUsers
             {

@@ -1,23 +1,24 @@
 using System;
-using System.Linq;
 using DSharpPlus;
+using SDC_Sharp.DSharpPlus.Types;
 
 namespace SDC_Sharp.DSharpPlus
 {
-    public class ShardedDiscordClientWrapper : DiscordClientWrapperBase
+    public class ShardedDiscordClientWrapper : IDiscordClientWrapper
     {
         private readonly DiscordClient _client;
-        private readonly DiscordShardedClient _shards;
 
-        public ShardedDiscordClientWrapper(DiscordShardedClient client)
+        public ShardedDiscordClientWrapper(DiscordClient client)
         {
-            _shards = client;
-            _client = client.ShardClients.Values.First() ?? throw new ArgumentNullException(nameof(client));
-            SdcSharpExtensions.Discord = _client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public override ulong CurrentUserId => _client.CurrentUser.Id;
-        public override int ServersCount => _client.Guilds.Count;
-        public override int ShardCount => _shards.ShardClients.Count;
+        DiscordClient IDiscordClientWrapper.Client => _client;
+        
+        public ulong CurrentUserId => _client.CurrentUser.Id;
+        
+        public int ServersCount => _client.Guilds.Count;
+        
+        public int ShardCount => _client.ShardCount;
     }
 }
