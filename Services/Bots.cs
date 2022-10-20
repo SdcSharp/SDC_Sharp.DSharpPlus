@@ -11,28 +11,28 @@ namespace SDC_Sharp.DSharpPlus.Services
 {
     public class Bots
     {
-        private SdcSharpClient _sdcClient;
-        internal Bots(ref SdcSharpClient client) => _sdcClient = client;
+        private SdcSharpClient m_sdcClient;
+        internal Bots(ref SdcSharpClient client) => m_sdcClient = client;
 
         public async Task<BotsResponse> UpdateStats(int serversCount, int shardsCount, ulong clientId)
         {
-            await _sdcClient.RateLimiter();
+            await m_sdcClient.RateLimiter();
 
-            return await _sdcClient.PostRequest<BotsResponse>(
-                $"bots/{(clientId != 0 ? clientId : _sdcClient.Wrapper.CurrentUserId)}/stats",
+            return await m_sdcClient.PostRequest<BotsResponse>(
+                $"bots/{(clientId != 0 ? clientId : m_sdcClient.Wrapper.CurrentUserId)}/stats",
                 new StringContent(JsonConvert.SerializeObject(new Dictionary<string, int>
                 {
                     {
                         "shardsCount",
                         shardsCount != 0
                             ? shardsCount
-                            : _sdcClient.Wrapper.ShardCount
+                            : m_sdcClient.Wrapper.ShardCount
                     },
                     {
                         "serversCount",
                         serversCount != 0
                             ? serversCount
-                            : _sdcClient.Wrapper.ServersCount
+                            : m_sdcClient.Wrapper.ServersCount
                     }
                 }), Encoding.UTF8, "application/json"));
         }
@@ -41,7 +41,7 @@ namespace SDC_Sharp.DSharpPlus.Services
             TimeSpan timeout = default)
         {
             timeout = timeout == default
-                ? _sdcClient.DefaultTimeout
+                ? m_sdcClient.DefaultTimeout
                 : timeout >= TimeSpan.FromMinutes(30)
                     ? timeout
                     : TimeSpan.FromMinutes(30);
@@ -50,9 +50,9 @@ namespace SDC_Sharp.DSharpPlus.Services
                 try
                 {
                     await UpdateStats(
-                        serversCount ?? _sdcClient.Wrapper.ServersCount,
-                        shardsCount ?? _sdcClient.Wrapper.ShardCount,
-                        clientId ?? _sdcClient.Wrapper.CurrentUserId);
+                        serversCount ?? m_sdcClient.Wrapper.ServersCount,
+                        shardsCount ?? m_sdcClient.Wrapper.ShardCount,
+                        clientId ?? m_sdcClient.Wrapper.CurrentUserId);
                     await Task.Delay(timeout);
                 }
                 catch

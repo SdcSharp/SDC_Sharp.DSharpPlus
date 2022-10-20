@@ -6,18 +6,18 @@ namespace SDC_Sharp.DSharpPlus
 {
     public class DiscordClientWrapper : IDiscordClientWrapper
     {
-        internal readonly DiscordClient _client;
+        internal readonly DiscordClient Client;
 
         public DiscordClientWrapper(DiscordClient client)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            Client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        DiscordClient IDiscordClientWrapper.Client => _client;
+        DiscordClient IDiscordClientWrapper.Client => Client;
 
-        public ulong CurrentUserId => _client.CurrentUser.Id;
+        public ulong CurrentUserId => Client.CurrentUser.Id;
 
-        public int ServersCount => _client.Guilds.Count;
+        public int ServersCount => Client.Guilds.Count;
 
         public int ShardCount => 1;
     }

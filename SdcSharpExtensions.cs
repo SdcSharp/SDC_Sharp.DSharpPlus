@@ -7,44 +7,44 @@ using SDC_Sharp.DSharpPlus.Types;
 using SDC_Sharp.SDC_Sharp;
 using IDiscordClientWrapper = SDC_Sharp.SDC_Sharp.Types.IDiscordClientWrapper;
 
-namespace SDC_Sharp
+namespace SDC_Sharp.DSharpPlus
 {
     public static class SdcSharpExtensions
     {
-        private static SdcSharpClient _sdcClient;
+        private static SdcSharpClient m_sdcClient;
         
-        private static Bots _bots;
-        private static Monitoring _monitoring;
-        private static Blacklist _blacklist;
+        private static Bots m_bots;
+        private static Monitoring m_monitoring;
+        private static Blacklist m_blacklist;
         
-        private static DiscordClient _discord;
+        private static DiscordClient m_discord;
         
-        public static Bots GetBots(this SdcSharpClient client) => _bots;
-        public static Monitoring GetMonitoring(this SdcSharpClient client) => _monitoring;
-        public static Blacklist GetBlacklist(this SdcSharpClient client) => _blacklist;
+        public static Bots GetBots(this SdcSharpClient client) => m_bots;
+        public static Monitoring GetMonitoring(this SdcSharpClient client) => m_monitoring;
+        public static Blacklist GetBlacklist(this SdcSharpClient client) => m_blacklist;
         
         public static IServiceCollection AddSdcClient(this IServiceCollection serviceCollection,
             SdcClientConfig config)
         {
-            _discord = config._wrapper.Client;
-            _sdcClient = new SdcSharpClient(config);
+            m_discord = config.wrapper.Client;
+            m_sdcClient = new SdcSharpClient(config);
 
-            _bots = new Bots(ref _sdcClient);
-            _monitoring = new Monitoring(ref _sdcClient);
-            _blacklist = new Blacklist(ref _sdcClient);
+            m_bots = new Bots(ref m_sdcClient);
+            m_monitoring = new Monitoring(ref m_sdcClient);
+            m_blacklist = new Blacklist(ref m_sdcClient);
 
-            serviceCollection.AddSingleton(_sdcClient);
+            serviceCollection.AddSingleton(m_sdcClient);
             return serviceCollection;
         }
 
         public static async Task<DiscordUser> GetUser(this IDiscordClientWrapper client, ulong id)
         {
-            return await _discord.GetUserAsync(id);
+            return await m_discord.GetUserAsync(id);
         }
 
         public static async Task<DiscordGuild> GetGuild(this IDiscordClientWrapper client, ulong id)
         {
-            return await _discord.GetGuildAsync(id);
+            return await m_discord.GetGuildAsync(id);
         }
     }
 }

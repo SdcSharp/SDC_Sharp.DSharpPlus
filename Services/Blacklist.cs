@@ -6,13 +6,13 @@ namespace SDC_Sharp.DSharpPlus.Services
 {
     public class Blacklist
     {
-        private SdcSharpClient _sdcClient;
-        internal Blacklist(ref SdcSharpClient client) => _sdcClient = client;
+        private SdcSharpClient m_sdcClient;
+        internal Blacklist(ref SdcSharpClient client) => m_sdcClient = client;
 
         public async Task<BlacklistResponse> GetWarns(ulong id)
         {
-            var res = await _sdcClient.GetRequest<BlacklistResponse>($"warns/{id}");
-            res.SdcClient = _sdcClient;
+            var res = await m_sdcClient.GetRequest<BlacklistResponse>($"warns/{id}");
+            res.SdcClient = m_sdcClient;
             if (res.Id == 0)
                 res.Id = id;
 

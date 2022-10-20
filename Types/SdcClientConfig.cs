@@ -4,19 +4,19 @@ namespace SDC_Sharp.DSharpPlus.Types
 {
     public class SdcClientConfig : ISdcClientConfig
     {
-        private string _token;
-        internal IDiscordClientWrapper _wrapper;
+        private string m_token;
+        internal IDiscordClientWrapper wrapper;
 
         public SDC_Sharp.Types.IDiscordClientWrapper Wrapper
         {
-            get => _wrapper;
-            set => _wrapper = value as IDiscordClientWrapper;
+            get => wrapper;
+            set => wrapper = value as IDiscordClientWrapper;
         }
 
         public virtual string Token
         {
-            get => _token;
-            set => _token = value.StartsWith("SDC ") ? value : $"SDC {value}";
+            get => m_token;
+            set => m_token = value.StartsWith("SDC ") ? value : $"SDC {value}";
         }
     }
 }

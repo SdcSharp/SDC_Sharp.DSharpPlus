@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
 using SDC_Sharp.SDC_Sharp;
-using static SDC_Sharp.SdcSharpExtensions;
+using static SDC_Sharp.DSharpPlus.SdcSharpExtensions;
 
 namespace SDC_Sharp.DSharpPlus.Types
 {
@@ -190,23 +190,23 @@ namespace SDC_Sharp.DSharpPlus.Types
         public BoostLevelEnum Boost { get; set; }
         public BadgesEnum Status { get; set; }
 
-        private BadgesEnum[] _bages;
+        private BadgesEnum[] m_bages;
         public BadgesEnum[] Bages
         {
             get
             {
-                if (_bages == null || _bages.Length < 1)
-                    _bages = GetBadgesEnums(Status).GetAwaiter().GetResult();
+                if (m_bages == null || m_bages.Length < 1)
+                    m_bages = GetBadgesEnums(Status).GetAwaiter().GetResult();
 
-                return _bages;
+                return m_bages;
             }
 
             set
             {
                 if (value.Length >= 1)
-                    _bages = value;
+                    m_bages = value;
                 else
-                    _bages = Array.Empty<BadgesEnum>();
+                    m_bages = Array.Empty<BadgesEnum>();
             }
         }
 
@@ -278,24 +278,24 @@ namespace SDC_Sharp.DSharpPlus.Types
     [Flags]
     public enum BoostLevelEnum
     {
-        none = 0,
-        light = 1,
-        pro = 2,
-        max = 3
+        None = 0,
+        Light = 1,
+        Pro = 2,
+        Max = 3
     }
 
     [Flags]
     public enum BadgesEnum
     {
-        sitedev = 0x1,
-        verefied = 0x2,
-        partner = 0x4,
-        favorite = 0x8,
-        bughunter = 0x10,
-        easteregg = 0x20,
-        botdev = 0x40,
-        youtube = 0x80,
-        twitch = 0x100,
-        spamhunt = 0x200
+        Sitedev = 0x1,
+        Verefied = 0x2,
+        Partner = 0x4,
+        Favorite = 0x8,
+        Bughunter = 0x10,
+        Easteregg = 0x20,
+        Botdev = 0x40,
+        Youtube = 0x80,
+        Twitch = 0x100,
+        Spamhunt = 0x200
     }
 }
