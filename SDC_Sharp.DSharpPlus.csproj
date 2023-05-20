@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
         <PackageId>SDC_Sharp.DSharpPlus</PackageId>
         <Title>SDC_Sharp.DSharpPlus</Title>
         <Authors>Satan1c</Authors>
@@ -12,17 +11,19 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>SDC</PackageTags>
         <AssemblyName>SDC_Sharp.DSharpPlus</AssemblyName>
-        <PackageVersion>2.0.1</PackageVersion>
+        <PackageVersion>2.2.0</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <LangVersion>10</LangVersion>
+        <TargetFrameworks>net7.0;net6.0;net6.0-windows;net7.0-windows</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="4.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0"/>
+        <PackageReference Include="DSharpPlus" Version="4.4.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SDC_Sharp.csproj"/>
+        <ProjectReference Include="..\SDC_Sharp\SDC_Sharp.csproj" />
     </ItemGroup>
 
 </Project>
