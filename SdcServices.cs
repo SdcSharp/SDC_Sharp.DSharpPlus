@@ -4,9 +4,9 @@ using SDC_Sharp.DSharpPlus.Types;
 
 namespace SDC_Sharp.DSharpPlus;
 
-public sealed class SdcServices
+public sealed class SdcServices : ISdcServices
 {
-	public readonly IClientConfig Client;
+	public IClientConfig Client { get; }
 
 	public SdcServices(IClientConfig config)
 	{
